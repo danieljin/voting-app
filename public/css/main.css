@@ -1,0 +1,54 @@
+#main {
+    top: 200px;
+    max-width: 700px;
+    min-width: 550px;
+    margin: 0 auto;
+    position: static;
+    display: table;
+}
+
+.user {
+    margin: 0px 10px 10px !important;
+    width: 60px;
+    height: 90px;
+    padding: 0;
+    float: left;
+    color: black;
+    text-align: center;
+}
+
+.user.voted {
+    background-color: #d95c5c !important;
+}
+
+.ribbon {
+    top: -6px;
+}
+
+#container {
+    min-height: 100px;
+}
+
+#loading {
+    position: absolute;
+    left: 0;
+    top: -100px;
+    bottom: -100px;
+    right: 0;
+    background: #000;
+    opacity: 0.8;
+    z-index: 9999;
+    filter: alpha(opacity=80);
+}
+#buttons .ui.buttons {
+    width: 100%;
+}
+
+#buttons .button {
+    width: 8.333333%;
+    border-right: 1px solid white;
+}
+#buttons .button:last-child {
+    border-right: none;
+}
+
