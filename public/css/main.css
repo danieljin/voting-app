@@ -7,17 +7,20 @@
     display: table;
 }
 
+.usershape {
+    float: left;
+}
+
 .user {
     margin: 0px 10px 10px !important;
     width: 60px;
     height: 90px;
     padding: 0;
-    float: left;
     color: black;
     text-align: center;
 }
 
-.user.voted {
+.user.red {
     background-color: #d95c5c !important;
 }
 
@@ -27,6 +30,33 @@
 
 #container {
     min-height: 100px;
+}
+
+.item.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+h3.header {
+    line-height: 50px !important;
+}
+
+.welcome .input {
+    margin-top: 20px;
+}
+
+.welcome .icon {
+    cursor: pointer !important;
+}
+
+i.reply {
+    margin-left: 20px !important;
+    color: #c8c8c8;
+    cursor: pointer !important;
+}
+
+i.reply:hover{
+    color: #00b5ad;
 }
 
 #loading {
@@ -40,15 +70,9 @@
     z-index: 9999;
     filter: alpha(opacity=80);
 }
-#buttons .ui.buttons {
-    width: 100%;
-}
 
-#buttons .button {
-    width: 8.333333%;
-    border-right: 1px solid white;
+.corner {
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    top: -2px !important;
 }
-#buttons .button:last-child {
-    border-right: none;
-}
-
