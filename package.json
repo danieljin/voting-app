@@ -1,5 +1,5 @@
 {
-  "name": "Voting App",
+  "name": "voting-app",
   "version": "0.0.1",
   "description": "A planning poker application for agile.",
   "main": "index.js",
