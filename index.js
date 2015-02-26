@@ -27,6 +27,7 @@ function updateRooms(room, userId){
     for (var i = rooms.length - 1; i >= 0; i--) {
       if ( room == rooms[i].id){
         rooms[i].users.push({id:userId, vote:null});
+        return;
       } else {
         if (i == 0) {
           rooms.push({id:room, revealed:false, users:[{id:userId, vote:null}]});
@@ -176,12 +177,12 @@ function emitToExcept(io, room, userId) {
 io.on('connection', function(socket){
   var url = socket.handshake.headers.referer;
   var room = url.split('/').slice(-1)[0];
+  // join room
+  socket.join(room);
 
   updateRooms(room, socket.id);
   setRevealed(room, false);
 
-  // join room
-  socket.join(room);
   // emit roominfo
   io.to(socket.id).emit('roominfo', {number: room, userCount: getRoomCount(room), voters: getRoomVoters(room)});
   // emit joined
