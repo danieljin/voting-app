@@ -88,11 +88,11 @@ i.reply:hover{
 }
 
 .ui.toggle.checkbox input[type=radio]:not(:checked)~label:before {
-    background-color: #d95c5c !important;
+    background-color: #00b5ad !important;
 }
 
 .ui.toggle.checkbox input[type=radio]:checked~label:before {
-    background-color: #00b5ad !important;
+    background-color: #d95c5c !important;
 }
 
 .toggle.checkbox {
