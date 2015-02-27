@@ -23,6 +23,10 @@ socket.on('roominfo', function (data) {
     }
     changeVoteType(data.type);
 });
+socket.on('reconnect', function () {
+    'use strict';
+    location.reload();
+});
 socket.on('joined', function () {
     'use strict';
     $('#hidden .usershape').first().clone().appendTo('#container').fadeIn();

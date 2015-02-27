@@ -242,18 +242,15 @@ io.on('connection', function (socket) {
     // Gets room number from URL
     var room = socket.handshake.headers.referer.split('/').slice(-1)[0];
 
-    if (!inRoom(room,socket.id)) {
+    socket.join(room);
 
-        socket.join(room);
+    updateRooms(room, socket.id);
+    setRevealed(room, false);
 
-        updateRooms(room, socket.id);
-        setRevealed(room, false);
-
-        // emit roominfo
-        io.to(socket.id).emit('roominfo', {number: room, type: getRoomType(room), userCount: getRoomCount(room), voters: getRoomVoters(room)});
-        // emit joined
-        emitToExcept(io, room, socket.id, 'joined');
-    }
+    // emit roominfo
+    io.to(socket.id).emit('roominfo', {number: room, type: getRoomType(room), userCount: getRoomCount(room), voters: getRoomVoters(room)});
+    // emit joined
+    emitToExcept(io, room, socket.id, 'joined');
 
     socket.on('create', function () {
         room = Math.floor(Math.random() * 90000) + 10000;
