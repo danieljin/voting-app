@@ -156,7 +156,7 @@ function revealVotes(votes) {
 
 function changeVoteType(type) {
     'use strict';
-    if (type === 'roman') {
+    if (type === 'poker') {
         $('#roman').addClass('hidden');
         $('#poker').removeClass('hidden');
         $('input#toggle').prop("checked", false);
@@ -205,9 +205,9 @@ $(function () {
 
     $('#toggle').change(function (e) {
         if ($(this).is(':checked')) { // check if the radio is checked
-            socket.emit('change', 'poker');
-        } else {
             socket.emit('change', 'roman');
+        } else {
+            socket.emit('change', 'poker');
         }
     });
 

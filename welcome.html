@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>danielkjin - Voting App</title>
+    <meta name="viewport" content="width=device-width" />
     <link rel='stylesheet' type='text/css' href='css/main.css'>
     <link rel='stylesheet' type='text/css' href='vendor/semantic/semantic.min.css'>
     <script src='/socket.io/socket.io.js'></script>
@@ -27,25 +28,24 @@
     </script>
   </head>
   <body bgcolor='#242624'>
-  <div class='ui piled segment'>
-    <div class='ui teal dividing header'>
-      <i class='dashboard icon'></i>
-      <div class='content'>
-        Voting App
-        <div class='sub header'>danielkjin</div>
+    <div class='ui piled segment'>
+      <div class='ui teal dividing header'>
+        <i class='dashboard icon'></i>
+        <div class='content'>
+          Voting App
+          <div class='sub header'>danielkjin</div>
+        </div>
       </div>
     </div>
-  </div>
-  <div id='main'>
-    <div class='ui stacked segment welcome'>
-      Welcome to the voting app. Please enter in a room name below to join a session.
-      <br>
-      <div class='ui icon input'>
-            <input class='prompt' type='text' placeholder='Room Name'>
-            <i class='sign in icon'></i>
-          </div>
+    <div id='main'>
+      <div class='ui stacked segment welcome'>
+        Welcome to the voting app. Please enter in a room name below to join a session.
+        <br>
+        <div class='ui icon input'>
+          <input class='prompt' type='text' placeholder='Room Name' />
+          <i class='sign in icon'></i>
+        </div>
       </div>
     </div>
-  </div>
   </body>
 </html>

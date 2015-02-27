@@ -45,17 +45,32 @@ function updateRooms(room, userId) {
     }
 }
 
-function removeRoomUsers(room, userId) {
+function removeRoom(room) {
     'use strict';
-    var i, j, users;
+    var i;
     for (i = rooms.length - 1; i >= 0; i--) {
         if (room === rooms[i].id) {
-            users = rooms[i].users;
-            for (j = users.length - 1; j >= 0; j--) {
-                if (users[j].id === userId) {
-                    rooms[i].users.splice(j, 1);
-                }
-            }
+            rooms.splice(i, 1);
+        }
+    }
+}
+
+function setRoomType(room, type) {
+    'use strict';
+    var i;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            rooms[i].type = type;
+        }
+    }
+}
+
+function getRoomType(room) {
+    'use strict';
+    var i;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            return rooms[i].type;
         }
     }
 }
@@ -83,6 +98,21 @@ function getRoomVoters(room) {
                 }
             }
             return voters;
+        }
+    }
+}
+
+function removeRoomUsers(room, userId) {
+    'use strict';
+    var i, j, users;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            users = rooms[i].users;
+            for (j = users.length - 1; j >= 0; j--) {
+                if (users[j].id === userId) {
+                    rooms[i].users.splice(j, 1);
+                }
+            }
         }
     }
 }
@@ -128,18 +158,19 @@ function removeVotes(room) {
     }
 }
 
-function inRoom(room, userId) {
+function allVoted(room) {
     'use strict';
-    var i, j, users;
+    var i, j, users, voters;
     for (i = rooms.length - 1; i >= 0; i--) {
         if (room === rooms[i].id) {
             users = rooms[i].users;
+            voters = [];
             for (j = users.length - 1; j >= 0; j--) {
-                if (users[j].id === userId) {
-                    return true;
+                if (users[j].vote) {
+                    voters.push(users[j].id);
                 }
             }
-            return false;
+            return users.length === voters.length;
         }
     }
 }
@@ -170,43 +201,6 @@ function getUsers(room) {
     for (i = rooms.length - 1; i >= 0; i--) {
         if (room === rooms[i].id) {
             return rooms[i].users;
-        }
-    }
-}
-
-function setRoomType(room, type) {
-    'use strict';
-    var i;
-    for (i = rooms.length - 1; i >= 0; i--) {
-        if (room === rooms[i].id) {
-            rooms[i].type = type;
-        }
-    }
-}
-
-function getRoomType(room) {
-    'use strict';
-    var i;
-    for (i = rooms.length - 1; i >= 0; i--) {
-        if (room === rooms[i].id) {
-            return rooms[i].type;
-        }
-    }
-}
-
-function allVoted(room) {
-    'use strict';
-    var i, j, users, voters;
-    for (i = rooms.length - 1; i >= 0; i--) {
-        if (room === rooms[i].id) {
-            users = rooms[i].users;
-            voters = [];
-            for (j = users.length - 1; j >= 0; j--) {
-                if (users[j].vote) {
-                    voters.push(users[j].id);
-                }
-            }
-            return users.length === voters.length;
         }
     }
 }
@@ -250,12 +244,16 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         removeRoomUsers(room, socket.id);
         io.to(room).emit('left', {userId: socket.id});
-        if (allVoted(room)) {
-            // only reveal once
-            if (!getRevealed(room)) {
-                io.to(room).emit('reveal', {votes: getUsers(room)});
+        if (getRoomCount(room) === 0) {
+            removeRoom(room);
+        } else {
+            if (allVoted(room)) {
+                // only reveal once
+                if (!getRevealed(room)) {
+                    io.to(room).emit('reveal', {votes: getUsers(room)});
+                }
+                setRevealed(room, true);
             }
-            setRevealed(room, true);
         }
     });
 
