@@ -3,6 +3,7 @@
 
 // Socket functions
 var socket = io();
+socket.io.reconnection(false);
 
 socket.on('roominfo', function (data) {
     'use strict';
@@ -22,10 +23,6 @@ socket.on('roominfo', function (data) {
         }
     }
     changeVoteType(data.type);
-});
-socket.on('reconnect', function () {
-    'use strict';
-    location.reload();
 });
 socket.on('joined', function () {
     'use strict';
