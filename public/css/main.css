@@ -104,7 +104,11 @@ i.reply:hover{
     display: none;
 }
 
+h3.ui.header {
+    margin-top: 10px !important;
+}
+
 h3.ui.header>.icon {
-    display: inline !important;
+    display: table !important;
     margin: 0 !important;
 }
