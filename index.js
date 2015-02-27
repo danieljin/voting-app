@@ -117,6 +117,22 @@ function removeRoomUsers(room, userId) {
     }
 }
 
+function inRoom(room, userId) {
+    'use strict';
+    var i, j, users;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            users = rooms[i].users;
+            for (j = users.length - 1; j >= 0; j--) {
+                if (users[j].id === userId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+}
+
 function addVote(room, userId, vote) {
     'use strict';
     var i, j, users;
@@ -205,7 +221,7 @@ function getUsers(room) {
     }
 }
 
-function emitToExcept(io, room, userId) {
+function emitToExcept(io, room, userId, message) {
     'use strict';
     var i, j, users;
     for (i = rooms.length - 1; i >= 0; i--) {
@@ -213,7 +229,7 @@ function emitToExcept(io, room, userId) {
             users = rooms[i].users;
             for (j = users.length - 1; j >= 0; j--) {
                 if (users[j].id !== userId) {
-                    io.to(users[j].id).emit('joined');
+                    io.to(users[j].id).emit(message);
                 }
             }
         }
@@ -226,15 +242,18 @@ io.on('connection', function (socket) {
     // Gets room number from URL
     var room = socket.handshake.headers.referer.split('/').slice(-1)[0];
 
-    socket.join(room);
+    if (!inRoom(room,socket.id)) {
 
-    updateRooms(room, socket.id);
-    setRevealed(room, false);
+        socket.join(room);
 
-    // emit roominfo
-    io.to(socket.id).emit('roominfo', {number: room, type: getRoomType(room), userCount: getRoomCount(room), voters: getRoomVoters(room)});
-    // emit joined
-    emitToExcept(io, room, socket.id);
+        updateRooms(room, socket.id);
+        setRevealed(room, false);
+
+        // emit roominfo
+        io.to(socket.id).emit('roominfo', {number: room, type: getRoomType(room), userCount: getRoomCount(room), voters: getRoomVoters(room)});
+        // emit joined
+        emitToExcept(io, room, socket.id, 'joined');
+    }
 
     socket.on('create', function () {
         room = Math.floor(Math.random() * 90000) + 10000;
