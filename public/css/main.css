@@ -2,15 +2,29 @@
     #reset, #roman{
         margin-left: 10px;
     }
+
+    .segment {
+        border-radius: 0px !important;
+    }
+
+    #poker {
+        border-radius: 0px !important;
+    }
+    .ui.dividing.header {
+        padding-bottom: 0 !important;
+        border-bottom: none !important;
+        font-size: small !important;
+    }
+    .ui.piled.segment:after, .ui.piled.segment:before {
+        visibility: hidden !important;
+    }
 }
 
 @media (min-width:600px) {
     #main {
-        top: 200px;
-        max-width: 700px;
-        min-width: 550px;
         margin: 0 auto;
-        display: table;
+        width: 90%;
+        max-width: 600px;
     }
 }
 
