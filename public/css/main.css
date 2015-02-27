@@ -1,10 +1,16 @@
-#main {
-    top: 200px;
-    max-width: 700px;
-    min-width: 550px;
-    margin: 0 auto;
-    position: static;
-    display: table;
+@media (max-width:600px) {
+
+}
+
+@media (min-width:600px) {
+    #main {
+        top: 200px;
+        max-width: 700px;
+        min-width: 550px;
+        margin: 0 auto;
+        display: table;
+        position: static;
+    }
 }
 
 .usershape {
@@ -61,6 +67,7 @@ h3.header {
 
 i.reply {
     margin-left: 20px !important;
+    margin-top: -35px !important;
     color: #c8c8c8;
     cursor: pointer !important;
 }
