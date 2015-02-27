@@ -1,9 +1,8 @@
 /*jslint unparam: true, regexp: true, nomen: true, plusplus: true */
-/*global io, $, document, addHiddenVote, removeVoter, removeVote, removeVotes, revealVotes, hideVotes, changeVoteType, flip */
+/*global io, $, document, location, addHiddenVote, removeVoter, removeVote, removeVotes, revealVotes, hideVotes, changeVoteType, flip */
 
 // Socket functions
 var socket = io();
-socket.io.reconnection(false);
 
 socket.on('roominfo', function (data) {
     'use strict';
@@ -23,6 +22,11 @@ socket.on('roominfo', function (data) {
         }
     }
     changeVoteType(data.type);
+});
+socket.on('reconnecting', function () {
+    'use strict';
+    socket.io.reconnection(false);
+    location.reload();
 });
 socket.on('joined', function () {
     'use strict';
