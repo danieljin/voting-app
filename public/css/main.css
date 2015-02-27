@@ -39,10 +39,6 @@
     cursor: default;
 }
 
-h3.header {
-    line-height: 50px !important;
-}
-
 .button .icon.thumbs {
     margin: 0 !important;
 }
@@ -105,7 +101,7 @@ i.reply:hover{
 }
 
 h3.ui.header {
-    margin-top: 10px !important;
+    margin-top: 15px !important;
 }
 
 h3.ui.header>.icon {
