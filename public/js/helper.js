@@ -1,12 +1,12 @@
 /*jslint unparam: true, regexp: true, nomen: true, plusplus: true */
-/*global io, $, document, addHiddenVote, removeVoter, removeVote, removeVotes, revealVotes, hideVotes, flip */
+/*global io, $, document, addHiddenVote, removeVoter, removeVote, removeVotes, revealVotes, hideVotes, changeVoteType, flip */
 
 // Socket functions
 var socket = io();
 
 socket.on('roominfo', function (data) {
     'use strict';
-    $("#loading").fadeOut("slow");
+    $('#loading').fadeOut('slow');
     var i, len;
     for (i = 0, len = data.userCount; i < len; i++) {
         if (i === 0) {
@@ -47,6 +47,10 @@ socket.on('reveal', function (data) {
     'use strict';
     revealVotes(data.votes);
 });
+socket.on('change', function (data) {
+    'use strict';
+    changeVoteType(data);
+});
 
 // Helper Functions
 
@@ -57,7 +61,7 @@ function addHiddenVote(userId) {
         $('.usershape.me').data('userId', userId).addClass('voted');
         flip($('.usershape.me'), 'back');
         $('.usershape.me .back a').removeClass('hidden');
-        $('.usershape.me .close').click(function (e) {
+        $('.usershape.me .corner').click(function (e) {
             socket.emit('removeVote');
         });
         return false;
@@ -95,7 +99,7 @@ function removeVote(userId) {
             flip(this, 'front');
             if (socket.id === userId) {
                 $(this).find('a').addClass('hidden');
-                $('#buttons .item').removeClass('active');
+                $('.item').removeClass('active');
             }
         }
     });
@@ -131,7 +135,15 @@ function revealVotes(votes) {
     $('.usershape:data(userId)').each(function () {
         for (i = votes.length - 1; i >= 0; i--) {
             if ($(this).data('userId') === votes[i].id) {
-                $(this).find('h3').html(votes[i].vote);
+                if (votes[i].vote === 'up') {
+                    $(this).find('h3').html("<i class='thumbs outline up icon'></i>");
+                } else if (votes[i].vote === 'sideways') {
+                    $(this).find('h3').html("<i class='counterclockwise rotated thumbs outline down icon'></i>");
+                } else if (votes[i].vote === 'down') {
+                    $(this).find('h3').html("<i class='thumbs outline down icon'></i>");
+                } else {
+                    $(this).find('h3').html(votes[i].vote);
+                }
                 flip(this, 'front');
             }
         }
@@ -139,6 +151,17 @@ function revealVotes(votes) {
 
     $('.item').addClass('disabled');
     $('#reveal').addClass('disabled');
+}
+
+function changeVoteType(type) {
+    'use strict';
+    if (type === 'roman') {
+        $('#roman').addClass('hidden');
+        $('#poker').removeClass('hidden');
+    } else {
+        $('#poker').addClass('hidden');
+        $('#roman').removeClass('hidden');
+    }
 }
 
 function flip(selector, side) {
@@ -151,9 +174,19 @@ function flip(selector, side) {
 // On Page Load
 $(function () {
     'use strict';
-    $('.item').click(function (e) {
-        e.stopImmediatePropagation();
+    $('#poker .item').click(function (e) {
         socket.emit('addVote', $(this).html());
+        $(this).addClass('active').siblings().removeClass('active');
+    });
+    $('#roman .item').click(function (e) {
+        var icon = $(this).find('i');
+        if (icon.hasClass('up')) {
+            socket.emit('addVote', 'up');
+        } else if (icon.hasClass('rotated')) {
+            socket.emit('addVote', 'sideways');
+        } else {
+            socket.emit('addVote', 'down');
+        }
         $(this).addClass('active').siblings().removeClass('active');
     });
     $('#reset').click(function (e) {
@@ -165,4 +198,14 @@ $(function () {
     $('i.reply').click(function () {
         document.location.href = '/home';
     });
+    $('.ui.checkbox').checkbox();
+
+    $('#toggle').change(function (e) {
+        if ($(this).is(':checked')) { // check if the radio is checked
+            socket.emit('change', 'poker');
+        } else {
+            socket.emit('change', 'roman');
+        }
+    });
+
 });

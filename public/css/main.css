@@ -24,6 +24,12 @@
     background-color: #d95c5c !important;
 }
 
+.holder {
+    margin: 0 auto;
+    position: relative;
+    width: 246px;
+}
+
 .ribbon {
     top: -6px;
 }
@@ -39,6 +45,10 @@
 
 h3.header {
     line-height: 50px !important;
+}
+
+.button .icon.thumbs {
+    margin: 0 !important;
 }
 
 .welcome .input {
@@ -75,4 +85,25 @@ i.reply:hover{
     opacity: 0.8;
     filter: alpha(opacity=80);
     top: -2px !important;
+}
+
+.ui.toggle.checkbox input[type=radio]:not(:checked)~label:before {
+    background-color: #d95c5c !important;
+}
+
+.ui.toggle.checkbox input[type=radio]:checked~label:before {
+    background-color: #00b5ad !important;
+}
+
+.toggle.checkbox {
+    float: right;
+}
+
+.hidden {
+    display: none;
+}
+
+h3.ui.header>.icon {
+    display: inline !important;
+    margin: 0 !important;
 }

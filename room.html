@@ -21,51 +21,68 @@
     </div>
   </div>
   <div id='loading'>
-    <div class="ui active dimmer">
-      <div class="ui indeterminate text active loader">
+    <div class='ui active dimmer'>
+      <div class='ui indeterminate text active loader'>
         Connecting...
       </div>
     </div>
   </div>
-  <i class="big reply icon"></i>
+  <i class='big reply icon'></i>
   <div id='main'>
-    <div class='ui tertiary segment'>  <a id='ribbon' class='ui ribbon label teal'>#<span id="roomNumber"></span></a>
+    <div class='ui tertiary segment'>  <a id='ribbon' class='ui ribbon label teal'>#<span id='roomNumber'></span></a>
+      <div class='ui toggle checkbox'>
+        <input id='toggle' name='privacy' type='radio'>
+      </div>
       <div id='container'>
       </div>
     </div>
-    <div id='buttons' class="ui twelve item teal menu">
-      <a class="item">0</a>
-      <a class="item">1</a>
-      <a class="item">2</a>
-      <a class="item">3</a>
-      <a class="item">5</a>
-      <a class="item">8</a>
-      <a class="item">13</a>
-      <a class="item">21</a>
-      <a class="item">34</a>
-      <a class="item">55</a>
-      <a class="item">89</a>
-      <a class="item">?</a>
+    <div id='poker' class='ui twelve item teal menu'>
+      <a class='item'>0</a>
+      <a class='item'>1</a>
+      <a class='item'>2</a>
+      <a class='item'>3</a>
+      <a class='item'>5</a>
+      <a class='item'>8</a>
+      <a class='item'>13</a>
+      <a class='item'>21</a>
+      <a class='item'>34</a>
+      <a class='item'>55</a>
+      <a class='item'>89</a>
+      <a class='item'>?</a>
     </div>
-    <div id="reset" class="ui red basic labeled icon button">
-      <i class="retweet icon"></i>
+    <div id='roman' class='hidden'>
+      <div class='holder'>
+        <div class='ui button basic teal item'>
+          <i class='thumbs outline up icon big black'></i>
+        </div>
+        <div class='ui button basic teal item'>
+          <i class='thumbs outline down icon big black'></i>
+        </div>
+        <div class='ui button basic teal item'>
+          <i class='counterclockwise rotated thumbs outline down icon big black'></i>
+        </div>
+      </div>
+      <br>
+    </div>
+    <div id='reset' class='ui red basic labeled icon button'>
+      <i class='retweet icon'></i>
       Reset
     </div>
-    <div id="reveal" class="ui teal basic labeled icon button">
-      <i class="arrow circle up icon"></i>
+    <div id='reveal' class='ui teal basic labeled icon button'>
+      <i class='arrow circle up icon'></i>
       Reveal
     </div>
   </div>
   <div id='hidden'>
-    <div class="usershape ui text shape" style='display:none;'>
-      <div class="sides">
-        <div class="active ui header side front">
-          <div class='user ui compact stacked segment'><h3 class="ui header"></h3></div>
+    <div class='usershape ui text shape' style='display:none;'>
+      <div class='sides'>
+        <div class='active ui header side front'>
+          <div class='user ui compact stacked segment'><h3 class='ui header'></h3></div>
         </div>
-        <div class="ui header side back">
+        <div class='ui header side back'>
           <div class='user ui compact stacked segment red'>
-            <a class="ui right corner label hidden">
-              <i class="close icon"></i>
+            <a class='ui right corner label hidden'>
+              <i class='close icon'></i>
             </a>
           </div>
         </div>

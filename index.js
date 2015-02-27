@@ -268,6 +268,13 @@ io.on('connection', function (socket) {
     socket.on('reveal', function () {
         io.to(room).emit('reveal', {votes: getUsers(room)});
     });
+
+    socket.on('change', function (data) {
+        removeVotes(room);
+        setRevealed(room, false);
+        io.to(room).emit('removeVotes');
+        io.to(room).emit('change', data);
+    });
 });
 var port = process.env.PORT || 3000;
 http.listen(port, function () {
