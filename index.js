@@ -30,7 +30,7 @@ app.get('/:room', function (req, res) {
 function updateRooms(room, userId) {
     'use strict';
     if (rooms.length === 0) {
-        rooms.push({id: room, revealed: false, users: [{id: userId, vote: null}]});
+        rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, vote: null}]});
     } else {
         var i;
         for (i = rooms.length - 1; i >= 0; i--) {
@@ -39,7 +39,7 @@ function updateRooms(room, userId) {
                 return;
             }
             if (i === 0) {
-                rooms.push({id: room, revealed: false, users: [{id: userId, vote: null}]});
+                rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, vote: null}]});
             }
         }
     }
@@ -174,6 +174,26 @@ function getUsers(room) {
     }
 }
 
+function setRoomType(room, type) {
+    'use strict';
+    var i;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            rooms[i].type = type;
+        }
+    }
+}
+
+function getRoomType(room) {
+    'use strict';
+    var i;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            return rooms[i].type;
+        }
+    }
+}
+
 function allVoted(room) {
     'use strict';
     var i, j, users, voters;
@@ -218,7 +238,7 @@ io.on('connection', function (socket) {
     setRevealed(room, false);
 
     // emit roominfo
-    io.to(socket.id).emit('roominfo', {number: room, userCount: getRoomCount(room), voters: getRoomVoters(room)});
+    io.to(socket.id).emit('roominfo', {number: room, type: getRoomType(room), userCount: getRoomCount(room), voters: getRoomVoters(room)});
     // emit joined
     emitToExcept(io, room, socket.id);
 
@@ -270,10 +290,11 @@ io.on('connection', function (socket) {
     });
 
     socket.on('change', function (data) {
+        setRoomType(room, data);
         removeVotes(room);
         setRevealed(room, false);
         io.to(room).emit('removeVotes');
-        io.to(room).emit('change', data);
+        io.to(room).emit('change', getRoomType(room));
     });
 });
 var port = process.env.PORT || 3000;

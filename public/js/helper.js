@@ -21,6 +21,7 @@ socket.on('roominfo', function (data) {
             addHiddenVote(data.voters[i]);
         }
     }
+    changeVoteType(data.type);
 });
 socket.on('joined', function () {
     'use strict';
@@ -158,9 +159,11 @@ function changeVoteType(type) {
     if (type === 'roman') {
         $('#roman').addClass('hidden');
         $('#poker').removeClass('hidden');
+        $('input#toggle').prop("checked", false);
     } else {
         $('#poker').addClass('hidden');
         $('#roman').removeClass('hidden');
+        $('input#toggle').prop("checked", true);
     }
 }
 

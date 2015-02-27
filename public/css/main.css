@@ -1,5 +1,7 @@
 @media (max-width:600px) {
-
+    #reset, #roman{
+        margin-left: 10px;
+    }
 }
 
 @media (min-width:600px) {
@@ -9,31 +11,19 @@
         min-width: 550px;
         margin: 0 auto;
         display: table;
-        position: static;
     }
 }
 
-.usershape {
-    float: left;
-}
 
 .user {
-    margin: 0px 10px 10px !important;
+    margin: 10px 10px 10px !important;
     width: 60px;
     height: 90px;
-    padding: 0;
-    color: black;
     text-align: center;
 }
 
 .user.red {
     background-color: #d95c5c !important;
-}
-
-.holder {
-    margin: 0 auto;
-    position: relative;
-    width: 246px;
 }
 
 .ribbon {
@@ -104,6 +94,10 @@ i.reply:hover{
 
 .toggle.checkbox {
     float: right;
+}
+
+#roman {
+    padding-bottom: 10px;
 }
 
 .hidden {
