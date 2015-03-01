@@ -1,8 +1,8 @@
 /*jslint unparam: true, regexp: true, nomen: true, plusplus: true */
 /*global io, $, document, location, addHiddenVote, removeVoter, removeVote, removeVotes, revealVotes, hideVotes, changeVoteType, flip */
 
+var socket = io(), adminOnly = true;
 // Socket functions
-var socket = io();
 
 socket.on('roominfo', function (data) {
     'use strict';
@@ -15,6 +15,13 @@ socket.on('roominfo', function (data) {
             $('#hidden .usershape').first().clone().appendTo('#container').show();
         }
     }
+
+    if (data.userCount === 1 || adminOnly === false) {
+        $('#reset').removeClass('hidden');
+        $('#reveal').removeClass('hidden');
+        $('.toggle').removeClass('hidden');
+    }
+
     $('#roomNumber').html(data.number);
     if (data.voters.length > 0) {
         for (i = 0, len = data.voters.length; i < len; i++) {

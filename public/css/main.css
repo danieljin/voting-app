@@ -110,7 +110,7 @@ i.reply:hover{
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 h3.ui.header {
