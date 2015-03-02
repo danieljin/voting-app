@@ -22,7 +22,7 @@ socket.on('roominfo', function (data) {
         $('.toggle').removeClass('hidden');
     }
 
-    $('#roomNumber').html(data.number);
+    $('#roomNumber').html(decodeURIComponent(data.number));
     if (data.voters.length > 0) {
         for (i = 0, len = data.voters.length; i < len; i++) {
             addHiddenVote(data.voters[i]);
