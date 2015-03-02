@@ -133,7 +133,7 @@ function inRoom(room, userId) {
     }
 }
 
-function addVote(room, userId, vote) {
+function setVote(room, userId, vote) {
     'use strict';
     var i, j, users;
     for (i = rooms.length - 1; i >= 0; i--) {
@@ -150,17 +150,7 @@ function addVote(room, userId, vote) {
 
 function removeVote(room, userId) {
     'use strict';
-    var i, j, users;
-    for (i = rooms.length - 1; i >= 0; i--) {
-        if (room === rooms[i].id) {
-            users = rooms[i].users;
-            for (j = users.length - 1; j >= 0; j--) {
-                if (users[j].id === userId) {
-                    rooms[i].users[j].vote = null;
-                }
-            }
-        }
-    }
+    setVote(room, userId, null);
 }
 
 function removeVotes(room) {
@@ -276,7 +266,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('addVote', function (vote) {
-        addVote(room, socket.id, vote);
+        setVote(room, socket.id, vote);
         // emit vote and id
         io.to(room).emit('voted', {userId: socket.id});
 
