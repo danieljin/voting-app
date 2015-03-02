@@ -120,4 +120,5 @@ h3.ui.header {
 h3.ui.header>.icon {
     display: table-cell !important;
     margin: 0 !important;
+    font-size: 28px !important;
 }
