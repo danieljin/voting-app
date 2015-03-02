@@ -155,7 +155,9 @@ function removeVote(room, userId) {
         if (room === rooms[i].id) {
             users = rooms[i].users;
             for (j = users.length - 1; j >= 0; j--) {
-                rooms[i].users[j].vote = null;
+                if (users[j].id === userId) {
+                    rooms[i].users[j].vote = null;
+                }
             }
         }
     }
