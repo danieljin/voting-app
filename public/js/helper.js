@@ -1,7 +1,7 @@
 /*jslint unparam: true, regexp: true, nomen: true, plusplus: true */
 /*global io, $, document, location, addHiddenVote, removeVoter, removeVote, removeVotes, revealVotes, hideVotes, changeVoteType, flip */
 
-var socket = io(), adminOnly = true;
+var socket = io(), adminOnly = false;
 // Socket functions
 
 socket.on('roominfo', function (data) {
