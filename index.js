@@ -240,7 +240,7 @@ function emitToExcept(io, room, userId, message) {
 io.on('connection', function (socket) {
     'use strict';
     // Gets room number from URL
-    var room = socket.handshake.headers.referer.split('/').slice(-1)[0];
+    var room = socket.handshake.headers.referer.split('/').slice(-1)[0].toLowerCase();
 
     socket.join(room);
 
