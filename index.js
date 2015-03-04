@@ -228,9 +228,11 @@ function emitToExcept(io, room, userId, message) {
     }
 }
 
-
 io.on('connection', function (socket) {
     'use strict';
+
+    io.set("close timeout", 10);
+
     // Gets room number from URL
     var room = socket.handshake.headers.referer.split('/').slice(-1)[0].toLowerCase();
 
