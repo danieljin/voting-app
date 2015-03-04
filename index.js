@@ -231,7 +231,8 @@ function emitToExcept(io, room, userId, message) {
 io.on('connection', function (socket) {
     'use strict';
 
-    io.set("close timeout", 10);
+    io.set("heartbeat timeout", 10000);
+    io.set("heartbeat interval", 5000);
 
     // Gets room number from URL
     var room = socket.handshake.headers.referer.split('/').slice(-1)[0].toLowerCase();
