@@ -129,7 +129,11 @@ function setName(room, userId, name) {
 
 function setVote(room, userId, vote) {
     'use strict';
-    var i, j, users;
+    var i, j, users, numbers = ['0','1','2','3','5','8','13','21','34','55','89','?'];
+    if (numbers.indexOf(vote) < 0) {
+        vote = '?';
+    }
+
     for (i = rooms.length - 1; i >= 0; i--) {
         if (room === rooms[i].id) {
             users = rooms[i].users;
