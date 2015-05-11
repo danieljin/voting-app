@@ -2,8 +2,8 @@
 /*global io, $, document, location, addHiddenVote, removeVoter, removeVote, removeVotes, revealVotes, hideVotes, changeVoteType, flip */
 
 var socket = io(), adminOnly = false;
-// Socket functions
 
+// Socket functions
 socket.on('roominfo', function (data) {
     'use strict';
     $('#loading').fadeOut('slow');
@@ -63,6 +63,10 @@ socket.on('reveal', function (data) {
 socket.on('change', function (data) {
     'use strict';
     changeVoteType(data);
+});
+
+socket.on('ping', function(data){
+  socket.emit('pong', {beat: 1});
 });
 
 // Helper Functions

@@ -30,16 +30,16 @@ app.get('/:room', function (req, res) {
 function updateRooms(room, userId) {
     'use strict';
     if (rooms.length === 0) {
-        rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, vote: null}]});
+        rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, name:'undefined', vote: null}]});
     } else {
         var i;
         for (i = rooms.length - 1; i >= 0; i--) {
             if (room === rooms[i].id) {
-                rooms[i].users.push({id: userId, vote: null});
+                rooms[i].users.push({id: userId, name:'undefined', vote: null});
                 return;
             }
             if (i === 0) {
-                rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, vote: null}]});
+                rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, name:'undefined', vote: null}]});
             }
         }
     }
@@ -132,6 +132,22 @@ function inRoom(room, userId) {
         }
     }
 }
+
+function setName(room, userId, name) {
+    'use strict';
+    var i, j, users;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            users = rooms[i].users;
+            for (j = users.length - 1; j >= 0; j--) {
+                if (users[j].id === userId) {
+                    rooms[i].users[j].name = name;
+                }
+            }
+        }
+    }
+}
+
 
 function setVote(room, userId, vote) {
     'use strict';
@@ -247,9 +263,13 @@ io.on('connection', function (socket) {
     // emit joined
     emitToExcept(io, room, socket.id, 'joined');
 
-    socket.on('create', function () {
-        room = Math.floor(Math.random() * 90000) + 10000;
-        // redirect to url/:room
+    socket.on('setName', function (name) {
+        setName(room, socket.id, name);
+        io.to(room).emit('named', {userId: socket.id, name: name});
+    });
+
+    socket.on('pong', function(data){
+        console.log("Pong received from client");
     });
 
     socket.on('disconnect', function () {
@@ -306,6 +326,15 @@ io.on('connection', function (socket) {
         io.to(room).emit('change', getRoomType(room));
     });
 });
+
+function sendHeartbeat(){
+    setTimeout(sendHeartbeat, 8000);
+    io.sockets.emit('ping', { beat : 1 });
+}
+
+setTimeout(sendHeartbeat, 8000);
+
+
 var port = process.env.PORT || 3000;
 http.listen(port, function () {
     'use strict';
