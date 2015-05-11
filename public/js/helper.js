@@ -11,8 +11,14 @@ socket.on('roominfo', function (data) {
     for (i = 0, len = data.users.length; i < len; i++) {
         if (data.users[i].id == socket.id) {
             $('#hidden .usershape').first().clone().addClass('me').data('userId', socket.id).appendTo('#container').show();
+            var localName = localStorage.getItem('name');
+            if (localName) {
+                setName(socket.id, localName);
+                socket.emit('setName', localName);
+            }
             $('.me .name').prop('contenteditable', true).blur(function(e) {
                 socket.emit('setName', $(e.target).html());
+                localStorage.setItem("name", $(e.target).html());
             });
         } else {
             $('#hidden .usershape').first().clone().data('userId', data.users[i].id).appendTo('#container').show();
