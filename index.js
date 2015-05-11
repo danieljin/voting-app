@@ -30,16 +30,16 @@ app.get('/:room', function (req, res) {
 function updateRooms(room, userId) {
     'use strict';
     if (rooms.length === 0) {
-        rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, name:'undefined', vote: null}]});
+        rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, name:null, vote: null}]});
     } else {
         var i;
         for (i = rooms.length - 1; i >= 0; i--) {
             if (room === rooms[i].id) {
-                rooms[i].users.push({id: userId, name:'undefined', vote: null});
+                rooms[i].users.push({id: userId, name:null, vote: null});
                 return;
             }
             if (i === 0) {
-                rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, name:'undefined', vote: null}]});
+                rooms.push({id: room, revealed: false, type: 'poker', users: [{id: userId, name:null, vote: null}]});
             }
         }
     }

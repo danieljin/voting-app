@@ -19,6 +19,9 @@ socket.on('roominfo', function (data) {
             if (data.users[i].vote) {
                 addHiddenVote(data.users[i].id);
             }
+            if (data.users[i].name) {
+                setName(data.users[i].id, data.users[i].name);
+            }
         }
     }
 
