@@ -77,29 +77,7 @@ function getRoomType(room) {
 
 function getRoomCount(room) {
     'use strict';
-    var i;
-    for (i = rooms.length - 1; i >= 0; i--) {
-        if (room === rooms[i].id) {
-            return rooms[i].users.length;
-        }
-    }
-}
-
-function getRoomVoters(room) {
-    'use strict';
-    var i, j, users, voters;
-    for (i = rooms.length - 1; i >= 0; i--) {
-        if (room === rooms[i].id) {
-            users = rooms[i].users;
-            voters = [];
-            for (j = users.length - 1; j >= 0; j--) {
-                if (users[j].vote) {
-                    voters.push(users[j].id);
-                }
-            }
-            return voters;
-        }
-    }
+    getUsers(room).length
 }
 
 function removeRoomUsers(room, userId) {
@@ -229,7 +207,7 @@ function getUsers(room) {
     }
 }
 
-function emitToExcept(io, room, userId, message) {
+function emitToExcept(io, room, userId, message, params) {
     'use strict';
     var i, j, users;
     for (i = rooms.length - 1; i >= 0; i--) {
@@ -237,7 +215,7 @@ function emitToExcept(io, room, userId, message) {
             users = rooms[i].users;
             for (j = users.length - 1; j >= 0; j--) {
                 if (users[j].id !== userId) {
-                    io.to(users[j].id).emit(message);
+                    io.to(users[j].id).emit(message, params);
                 }
             }
         }
@@ -259,9 +237,9 @@ io.on('connection', function (socket) {
     setRevealed(room, false);
 
     // emit roominfo
-    io.to(socket.id).emit('roominfo', {number: room, type: getRoomType(room), userCount: getRoomCount(room), voters: getRoomVoters(room)});
+    io.to(socket.id).emit('roominfo', {number: room, type: getRoomType(room), users: getUsers(room)});
     // emit joined
-    emitToExcept(io, room, socket.id, 'joined');
+    io.to(room).emit('joined', {userId: socket.id});
 
     socket.on('setName', function (name) {
         setName(room, socket.id, name);

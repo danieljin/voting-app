@@ -122,3 +122,22 @@ h3.ui.header>.icon {
     margin: 0 !important;
     font-size: 28px !important;
 }
+
+.name {
+    width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.name * {
+    display: inline
+}
+
+.name br{
+    display: none
+}
+
+.me .front .user {
+    background: antiquewhite !important;
+}

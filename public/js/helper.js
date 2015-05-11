@@ -8,26 +8,28 @@ socket.on('roominfo', function (data) {
     'use strict';
     $('#loading').fadeOut('slow');
     var i, len;
-    for (i = 0, len = data.userCount; i < len; i++) {
-        if (i === 0) {
-            $('#hidden .usershape').first().clone().addClass('me').appendTo('#container').show();
+    for (i = 0, len = data.users.length; i < len; i++) {
+        if (data.users[i].id == socket.id) {
+            $('#hidden .usershape').first().clone().addClass('me').data('userId', socket.id).appendTo('#container').show();
+            $('.me .name').prop('contenteditable', true).blur(function(e) {
+                socket.emit('setName', $(e.target).html());
+            });
         } else {
-            $('#hidden .usershape').first().clone().appendTo('#container').show();
+            $('#hidden .usershape').first().clone().data('userId', data.users[i].id).appendTo('#container').show();
+            if (data.users[i].vote) {
+                addHiddenVote(data.users[i].id);
+            }
         }
     }
 
-    if (data.userCount === 1 || adminOnly === false) {
+    if (data.users.length === 1 || adminOnly === false) {
         $('#reset').removeClass('hidden');
         $('#reveal').removeClass('hidden');
         $('.toggle').removeClass('hidden');
     }
 
     $('#roomNumber').html(decodeURIComponent(data.number));
-    if (data.voters.length > 0) {
-        for (i = 0, len = data.voters.length; i < len; i++) {
-            addHiddenVote(data.voters[i]);
-        }
-    }
+
     changeVoteType(data.type);
 });
 socket.on('reconnecting', function () {
@@ -35,14 +37,16 @@ socket.on('reconnecting', function () {
     socket.io.reconnection(false);
     location.reload();
 });
-socket.on('joined', function () {
+socket.on('joined', function (data) {
     'use strict';
-    $('#hidden .usershape').first().clone().appendTo('#container').fadeIn();
-    hideVotes();
+    if (data.userId !== socket.id) {
+        $('#hidden .usershape').first().clone().data('userId', data.userId).appendTo('#container').fadeIn();
+        hideVotes();
+    }
 });
 socket.on('left', function (data) {
     'use strict';
-    removeVoter(data.userId);
+    removeUser(data.userId);
 });
 socket.on('voted', function (data) {
     'use strict';
@@ -69,13 +73,17 @@ socket.on('ping', function(data){
   socket.emit('pong', {beat: 1});
 });
 
+socket.on('named', function(data){
+  setName(data.userId, data.name);
+});
+
 // Helper Functions
 
 // this can be improved to not loop through unvoted cards
 function addHiddenVote(userId) {
     'use strict';
     if (socket.id === userId) {
-        $('.usershape.me').data('userId', userId).addClass('voted');
+        $('.usershape.me').addClass('voted');
         flip($('.usershape.me'), 'back');
         $('.usershape.me .back a').removeClass('hidden');
         $('.usershape.me .corner').click(function (e) {
@@ -85,25 +93,17 @@ function addHiddenVote(userId) {
     }
     $('#container .usershape').each(function (index) {
         if ($(this).data('userId') === userId) {
-            return false;
-        }
-        if ($('#container .usershape').length - 1 === index) {
-            var chosenOne = $('#container .usershape:not(.voted):not(.me)').first();
-            chosenOne.data('userId', userId).addClass('voted');
-            flip(chosenOne, 'back');
+            $(this).addClass('voted');
+            flip($(this), 'back');
         }
     });
 }
 
-function removeVoter(userId) {
+function removeUser(userId) {
     'use strict';
     $('#container .usershape').each(function (index) {
         if ($(this).data('userId') === userId) {
             $(this).remove();
-            return false;
-        }
-        if ($('#container .usershape').length - 1 === index) {
-            $('#container .usershape:not(.voted):not(.me)').last().remove();
         }
     });
 }
@@ -112,7 +112,7 @@ function removeVote(userId) {
     'use strict';
     $('#container .usershape').each(function (index) {
         if ($(this).data('userId') === userId) {
-            $(this).removeData('userId').removeClass('voted');
+            $(this).removeClass('voted');
             flip(this, 'front');
             if (socket.id === userId) {
                 $(this).find('a').addClass('hidden');
@@ -125,7 +125,7 @@ function removeVote(userId) {
 function removeVotes() {
     'use strict';
     $('#container .usershape').each(function (index) {
-        $(this).removeData('userId').removeClass('voted').find('h3').html('');
+        $(this).removeClass('voted').find('h3').html('');
         flip(this, 'front');
         $('.item').removeClass('disabled active');
         $('#reveal').removeClass('disabled');
@@ -190,6 +190,14 @@ function flip(selector, side) {
     }
 }
 
+function setName(userId, name) {
+    $('#container .usershape').each(function (index) {
+        if ($(this).data('userId') === userId) {
+            $(this).find('.name').html(name);
+        }
+    });
+}
+
 // On Page Load
 $(function () {
     'use strict';
@@ -226,5 +234,4 @@ $(function () {
             socket.emit('change', 'poker');
         }
     });
-
 });
