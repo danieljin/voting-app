@@ -129,7 +129,7 @@ function setName(room, userId, name) {
 
 function setVote(room, userId, vote) {
     'use strict';
-    var i, j, users, numbers = ['0','1','2','3','5','8','13','21','34','55','89','?'];
+    var i, j, users, numbers = ['0','1','2','3','5','8','13','21','34','55','89','?', 'up', 'sideways', 'down'];
     if (numbers.indexOf(vote) < 0) {
         vote = '?';
     }
