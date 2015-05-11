@@ -20,6 +20,11 @@ socket.on('roominfo', function (data) {
                 socket.emit('setName', $(e.target).html());
                 localStorage.setItem("name", $(e.target).html());
             });
+            $(".me .name").keyup(function(e) {
+                if (e.keyCode == 13) {
+                    $(".me .name").blur();
+                };
+            });
         } else {
             $('#hidden .usershape').first().clone().data('userId', data.users[i].id).appendTo('#container').show();
             if (data.users[i].vote) {
