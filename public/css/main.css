@@ -28,6 +28,10 @@
     }
 }
 
+.segment {
+    margin-top: 0px;
+}
+
 .user {
     margin: 10px 10px 10px !important;
     width: 60px;
