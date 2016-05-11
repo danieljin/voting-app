@@ -91,6 +91,10 @@ socket.on('named', function(data){
   setName(data.userId, data.name);
 });
 
+socket.on('timer', function(data) {debugger
+    setTime(data.seconds);
+});
+
 // Helper Functions
 
 // this can be improved to not loop through unvoted cards
@@ -212,6 +216,27 @@ function setName(userId, name) {
     });
 }
 
+function setTime(seconds) {
+    if (seconds !== undefined) {
+        d = Number(seconds);
+        $('#timer').removeClass('hidden');
+        $('.timer').addClass('primary');
+        $('#timer').html(secondsToHms(d));
+    } else {
+        $('#timer').html(secondsToHms(0));
+        $('#timer').addClass('hidden');
+        $('.timer').removeClass('primary');
+    }
+}
+
+function secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor(d % 3600 / 60);
+    var s = Math.floor(d % 3600 % 60);
+    return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (s < 10 ? "0" : "") + s);
+}
+
 // On Page Load
 $(function () {
     'use strict';
@@ -241,6 +266,25 @@ $(function () {
     });
     $('.ui.checkbox').checkbox();
 
+    $('.timer').click(function() {
+        if (!$(this).hasClass('primary')) {
+            $('#timer').html(secondsToHms(0));
+            $('#timer').removeClass('hidden');
+            $(this).addClass('primary');
+            socket.emit('startTimer')
+        } else {
+            $('#timer').html('');
+            $('#timer').addClass('hidden');
+            $(this).removeClass('primary');
+            socket.emit('clearTimer');
+        };
+    });
+
+    $('#timer').click(function() {
+        socket.emit('startTimer');
+        $(this).html(secondsToHms(0));
+    });
+
     $('#toggle').change(function (e) {
         if ($(this).is(':checked')) { // check if the radio is checked
             socket.emit('change', 'roman');
@@ -248,4 +292,8 @@ $(function () {
             socket.emit('change', 'poker');
         }
     });
+
+    setInterval(function() {
+        socket.emit('getTimer');
+    }, 1000);
 });

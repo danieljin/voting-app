@@ -211,6 +211,39 @@ function getUsers(room) {
     }
 }
 
+function startTimer(room) {
+    'use strict';
+    var i;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            rooms[i].timer = Date.now()/1000;
+        }
+    }
+}
+
+function getTimer(room) {
+    'use strict';
+    var i;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            if (rooms[i].timer) {
+                var currentTime = Date.now()/1000;
+                return Math.round(currentTime - rooms[i].timer);
+            }
+        }
+    }
+}
+
+function clearTimer(room) {
+    'use strict';
+    var i;
+    for (i = rooms.length - 1; i >= 0; i--) {
+        if (room === rooms[i].id) {
+            rooms[i].timer = null;
+        }
+    }
+}
+
 function emitToExcept(io, room, userId, message, params) {
     'use strict';
     var i, j, users;
@@ -290,6 +323,18 @@ io.on('connection', function (socket) {
         io.to(room).emit('removeVote', {userId: socket.id});
     });
 
+    socket.on('startTimer', function() {
+        startTimer(room);
+    });
+
+    socket.on('getTimer', function() {
+        io.to(room).emit('timer', {seconds: getTimer(room)})
+    });
+
+    socket.on('clearTimer', function() {
+        clearTimer(room);
+    });
+
     socket.on('reset', function () {
         removeVotes(room);
         setRevealed(room, false);
@@ -315,7 +360,6 @@ function sendHeartbeat(){
 }
 
 setTimeout(sendHeartbeat, 8000);
-
 
 var port = process.env.PORT || 3000;
 http.listen(port, function () {
