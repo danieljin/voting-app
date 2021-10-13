@@ -91,7 +91,7 @@ socket.on('named', function(data){
   setName(data.userId, data.name);
 });
 
-socket.on('timer', function(data) {debugger
+socket.on('timer', function(data) {
     setTime(data.seconds);
 });
 
