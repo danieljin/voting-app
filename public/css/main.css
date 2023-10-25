@@ -25,6 +25,7 @@
         margin: 0 auto;
         width: 90%;
         max-width: 600px;
+        padding-top: 1em;
     }
 }
 
@@ -70,7 +71,6 @@
 
 i.reply {
     margin-left: 20px !important;
-    margin-top: -35px !important;
     color: #c8c8c8;
     cursor: pointer !important;
 }
